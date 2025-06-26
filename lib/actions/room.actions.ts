@@ -35,3 +35,41 @@ export const createDocument = async ({
     console.log(`Error happened while creating room: ${roomId}`);
   }
 };
+
+export const getDocument = async ({
+  roomId,
+  userId,
+}: {
+  roomId: string;
+  userId: string;
+}) => {
+  try {
+    const room = await liveblocks.getRoom(roomId);
+
+    // TODO: Bring rhia back
+    // const hasAccess = Object.keys(room.usersAccesses).includes(userId);
+    // if (!hasAccess) {
+    //   throw new Error("You do not have access to this document");
+    // }
+
+    return parseStringify(room);
+  } catch (error) {
+    console.log(`Error happened while getting a room ${error}`);
+  }
+};
+
+export const updateDocument = async (roomId: string, title: string) => {
+  try {
+    const updatedRoom = await liveblocks.updateRoom(roomId, {
+      metadata: {
+        title,
+      },
+    });
+
+    revalidatePath(`documents/${roomId}`);
+
+    return parseStringify(updatedRoom);
+  } catch (error) {
+    console.log(`Error happen while updating a room : ${error}`);
+  }
+};
