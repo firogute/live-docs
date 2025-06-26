@@ -3,7 +3,7 @@
 import { clerkClient } from "@clerk/nextjs/server";
 import { parseStringify } from "../utils";
 
-export const getClerkUser = async ({ userIds }: { userIds: string[] }) => {
+export const getClerkUsers = async ({ userIds }: { userIds: string[] }) => {
   try {
     const { data } = await clerkClient.users.getUserList({
       emailAddress: userIds,
@@ -16,12 +16,12 @@ export const getClerkUser = async ({ userIds }: { userIds: string[] }) => {
       avatar: user.imageUrl,
     }));
 
-    const sortUsers = userIds.map((email) =>
-      users.find((user) => user.email == email)
+    const sortedUsers = userIds.map((email) =>
+      users.find((user) => user.email === email)
     );
 
-    return parseStringify(sortUsers);
+    return parseStringify(sortedUsers);
   } catch (error) {
-    console.error(`Error Fetching User: ${error}`);
+    console.log(`Error fetching users: ${error}`);
   }
 };

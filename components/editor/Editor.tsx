@@ -19,7 +19,13 @@ function Placeholder() {
   return <div className="editor-placeholder">Enter some rich text...</div>;
 }
 
-export function Editor() {
+export function Editor({
+  roomId,
+  currentUserType,
+}: {
+  roomId: string;
+  currentUserType: UserType;
+}) {
   const initialConfig = liveblocksConfig({
     namespace: "Editor",
     nodes: [HeadingNode],
@@ -28,13 +34,15 @@ export function Editor() {
       throw error;
     },
     theme: Theme,
-    editable: true,
+    editable: currentUserType === "editor",
   });
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
       <div className="editor-container size-full">
-        <ToolbarPlugin />
+        <div className="toolbar-wrapper flex min-w-full justify-between">
+          <ToolbarPlugin />
+        </div>
 
         <div className="editor-inner h-[1100px]">
           <RichTextPlugin
