@@ -25,7 +25,7 @@ export const createDocument = async ({
     const room = await liveblocks.createRoom(roomId, {
       metadata,
       usersAccesses,
-      defaultAccesses: ["room:write"],
+      defaultAccesses: [],
     });
 
     revalidatePath("/");
@@ -47,10 +47,10 @@ export const getDocument = async ({
     const room = await liveblocks.getRoom(roomId);
 
     // TODO: Bring rhia back
-    // const hasAccess = Object.keys(room.usersAccesses).includes(userId);
-    // if (!hasAccess) {
-    //   throw new Error("You do not have access to this document");
-    // }
+    const hasAccess = Object.keys(room.usersAccesses).includes(userId);
+    if (!hasAccess) {
+      throw new Error("You do not have access to this document");
+    }
 
     return parseStringify(room);
   } catch (error) {
